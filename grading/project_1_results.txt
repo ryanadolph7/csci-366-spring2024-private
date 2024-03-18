@@ -178,7 +178,7 @@ Expected equality of these values:
     Which is: 3
   error_code::ERROR_BAD_STACK
     Which is: 1
-[  FAILED  ] lmsm_machine_suite.test_sadd_instruction_enters_error_state_if_not_enough_elts (1 ms)
+[  FAILED  ] lmsm_machine_suite.test_sadd_instruction_enters_error_state_if_not_enough_elts (0 ms)
 [ RUN      ] lmsm_machine_suite.test_ssub_instruction_subtracts_the_values_on_the_stack
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/lmsm.cpp:286: Failure
 Expected equality of these values:
@@ -281,7 +281,7 @@ Expected equality of these values:
   the_machine->stack_pointer
     Which is: 200
   199
-[  FAILED  ] lmsm_machine_suite.test_call_instruction_jumps_to_correct_location_and_consumes_top_of_stack (0 ms)
+[  FAILED  ] lmsm_machine_suite.test_call_instruction_jumps_to_correct_location_and_consumes_top_of_stack (1 ms)
 [ RUN      ] lmsm_machine_suite.return_set_program_counter_to_return_address_and_restores_return_address
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/lmsm.cpp:466: Failure
 Expected equality of these values:
