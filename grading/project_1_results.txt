@@ -22,7 +22,7 @@ Expected equality of these values:
   the_machine->accumulator
     Which is: 20
   10
-[  FAILED  ] lmsm_machine_suite.test_sub_instruction_works (1 ms)
+[  FAILED  ] lmsm_machine_suite.test_sub_instruction_works (0 ms)
 [ RUN      ] lmsm_machine_suite.test_sub_instruction_properly_caps_values
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/lmsm.cpp:38: Failure
 Expected equality of these values:
@@ -178,7 +178,7 @@ Expected equality of these values:
     Which is: 3
   error_code::ERROR_BAD_STACK
     Which is: 1
-[  FAILED  ] lmsm_machine_suite.test_sadd_instruction_enters_error_state_if_not_enough_elts (0 ms)
+[  FAILED  ] lmsm_machine_suite.test_sadd_instruction_enters_error_state_if_not_enough_elts (1 ms)
 [ RUN      ] lmsm_machine_suite.test_ssub_instruction_subtracts_the_values_on_the_stack
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/lmsm.cpp:286: Failure
 Expected equality of these values:
