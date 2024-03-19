@@ -29,7 +29,7 @@ Expected equality of these values:
   the_machine->accumulator
     Which is: -995
   -999
-[  FAILED  ] lmsm_machine_suite.test_sub_instruction_properly_caps_values (0 ms)
+[  FAILED  ] lmsm_machine_suite.test_sub_instruction_properly_caps_values (2 ms)
 [ RUN      ] lmsm_machine_suite.test_store_instruction_works
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/lmsm.cpp:46: Failure
 Expected equality of these values:
@@ -281,7 +281,7 @@ Expected equality of these values:
   the_machine->stack_pointer
     Which is: 200
   199
-[  FAILED  ] lmsm_machine_suite.test_call_instruction_jumps_to_correct_location_and_consumes_top_of_stack (1 ms)
+[  FAILED  ] lmsm_machine_suite.test_call_instruction_jumps_to_correct_location_and_consumes_top_of_stack (0 ms)
 [ RUN      ] lmsm_machine_suite.return_set_program_counter_to_return_address_and_restores_return_address
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/lmsm.cpp:466: Failure
 Expected equality of these values:
@@ -298,10 +298,10 @@ Expected equality of these values:
 [  FAILED  ] lmsm_machine_suite.step_steps_to_the_next_instruction_and_executes_current (0 ms)
 [ RUN      ] lmsm_machine_suite.step_does_not_step_to_the_next_instruction_and_execute_if_machine_is_halted
 [       OK ] lmsm_machine_suite.step_does_not_step_to_the_next_instruction_and_execute_if_machine_is_halted (0 ms)
-[----------] 43 tests from lmsm_machine_suite (1 ms total)
+[----------] 43 tests from lmsm_machine_suite (2 ms total)
 
 [----------] Global test environment tear-down
-[==========] 43 tests from 1 test suite ran. (1 ms total)
+[==========] 43 tests from 1 test suite ran. (2 ms total)
 [  PASSED  ] 3 tests.
 [  FAILED  ] 40 tests, listed below:
 [  FAILED  ] lmsm_machine_suite.test_add_instruction_works
