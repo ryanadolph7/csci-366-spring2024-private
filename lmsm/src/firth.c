@@ -137,6 +137,10 @@ firth_parse_element *firth_parse_op(firth_tokens *tokens, firth_compilation_resu
     if (firth_match_token("+", tokens) ||
         firth_match_token("-", tokens) ||
         // TODO - add *, /, max and min
+        firth_match_token("*", tokens) || // *
+        firth_match_token("/", tokens) || // *
+        firth_match_token("max", tokens) || // *
+        firth_match_token("min", tokens) || // *
         firth_match_token("get", tokens) ||
         firth_match_token("dup", tokens) ||
         firth_match_token("pop", tokens) ||

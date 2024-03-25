@@ -1,4 +1,4 @@
-package edu.montana.csci.csci366.demo.concurrency;
+package edu.montana.csci.csci366.demos.concurrency;
 
 import java.util.Collections;
 import java.util.HashMap;

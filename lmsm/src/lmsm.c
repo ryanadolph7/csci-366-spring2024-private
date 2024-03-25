@@ -10,12 +10,20 @@
 //  Utilities
 //======================================================
 
+// 9 more test cases
+
 void lmsm_cap_value(int * val){
-   //TODO - implement capping the value pointed to by this pointer between 999 and -999
+   if (*val > 999) {
+       *val = 999;
+   } else if (*val < -999) {
+       *val = -999;
+   }
 }
 
 int lmsm_has_two_values_on_stack(lmsm *our_little_machine) {
-    //TODO - return 0 if there are not two values on the stack
+    if (our_little_machine -> memory [our_little_machine -> stack_pointer] != 0 && our_little_machine -> memory [our_little_machine -> stack_pointer + 1] != 0) {
+        return 0;
+    }
     return 1;
 }
 
@@ -24,77 +32,210 @@ int lmsm_has_two_values_on_stack(lmsm *our_little_machine) {
 //======================================================
 
 void lmsm_i_jal(lmsm *our_little_machine) {
+    // TODO: get this to work
+    //our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    our_little_machine -> return_address_pointer ++;
+    our_little_machine -> memory [our_little_machine -> return_address_pointer] = our_little_machine -> program_counter;
+    //our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
 }
 
 void lmsm_i_ret(lmsm *our_little_machine) {
+    our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> return_address_pointer];
+    our_little_machine -> return_address_pointer --;
 }
 
 void lmsm_i_push(lmsm *our_little_machine) {
+    our_little_machine -> stack_pointer--;
+    our_little_machine -> memory[our_little_machine -> stack_pointer] = our_little_machine -> accumulator;
 }
 
 void lmsm_i_pop(lmsm *our_little_machine) {
+    if (our_little_machine -> memory [our_little_machine -> stack_pointer] == 0) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        our_little_machine -> accumulator = our_little_machine -> memory [our_little_machine -> stack_pointer];
+        our_little_machine -> stack_pointer ++;
+    }
 }
 
 void lmsm_i_dup(lmsm *our_little_machine) {
+    int val = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    our_little_machine -> stack_pointer --;
+    our_little_machine -> memory [our_little_machine -> stack_pointer] = val;
 }
 
 void lmsm_i_drop(lmsm *our_little_machine) {
+    if (our_little_machine -> memory[our_little_machine -> stack_pointer] == 0) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        our_little_machine -> stack_pointer ++;
+    }
 }
 
 void lmsm_i_swap(lmsm *our_little_machine) {
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        int val1 = our_little_machine -> memory [our_little_machine -> stack_pointer];
+        our_little_machine -> stack_pointer ++;
+        int val2 = our_little_machine -> memory [our_little_machine -> stack_pointer];
+        int temp = val1;
+        val1 = val2;
+        val2 = temp;
+        our_little_machine -> memory [our_little_machine -> stack_pointer] = val2;
+        our_little_machine -> stack_pointer --;
+        our_little_machine -> memory [our_little_machine -> stack_pointer] = val1;
+    }
 }
 
 void lmsm_i_sadd(lmsm *our_little_machine) {
+    int val2 = our_little_machine -> memory[our_little_machine -> stack_pointer + 1];
+    int val1 = our_little_machine -> memory[our_little_machine -> stack_pointer];
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        int result = val1 + val2;
+        lmsm_cap_value(&result);
+        our_little_machine -> stack_pointer++;
+        our_little_machine -> memory[our_little_machine -> stack_pointer] = result;
+    }
 }
 
 void lmsm_i_ssub(lmsm *our_little_machine) {
+    int val1 = our_little_machine -> memory[our_little_machine -> stack_pointer];
+    int val2 = our_little_machine -> memory[our_little_machine -> stack_pointer + 1];
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        int result = val2 - val1;
+        lmsm_cap_value(&result);
+        our_little_machine -> stack_pointer++;
+        our_little_machine -> memory[our_little_machine -> stack_pointer] = result;
+    }
 }
 
 void lmsm_i_smax(lmsm *our_little_machine) {
+    int val1 = our_little_machine -> memory[our_little_machine -> stack_pointer];
+    int val2 = our_little_machine -> memory[our_little_machine -> stack_pointer + 1];
+    int res;
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else if (val1 < val2) {
+        res = val2;
+    } else if (val1 > val2) {
+        res = val1;
+    } else {
+        res = val1;
+    }
+    our_little_machine -> stack_pointer ++;
+    our_little_machine -> memory[our_little_machine -> stack_pointer] = res;
 }
 
 void lmsm_i_smin(lmsm *our_little_machine) {
+    int val1 = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    int val2 = our_little_machine -> memory [our_little_machine -> stack_pointer + 1];
+    int res;
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else if (val1 < val2) {
+        res = val1;
+    } else if (val1 > val2) {
+        res = val2;
+    } else {
+        res = val1;
+    }
+
+    our_little_machine -> stack_pointer ++;
+    our_little_machine -> memory [our_little_machine -> stack_pointer] = res;
 }
 
 void lmsm_i_smul(lmsm *our_little_machine) {
+    int val1 = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    int val2 = our_little_machine -> memory [our_little_machine -> stack_pointer + 1];
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        int res = val1 * val2;
+        lmsm_cap_value(&res);
+        our_little_machine -> stack_pointer ++;
+        our_little_machine -> memory [our_little_machine -> stack_pointer] = res;
+    }
 }
 
 void lmsm_i_sdiv(lmsm *our_little_machine) {
+    int val1 = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    int val2 = our_little_machine -> memory [our_little_machine -> stack_pointer + 1];
+    if (lmsm_has_two_values_on_stack(our_little_machine) == 1) {
+        our_little_machine -> status = STATUS_HALTED;
+        our_little_machine -> error_code = ERROR_BAD_STACK;
+    } else {
+        int res = val2 / val1;
+        lmsm_cap_value(&res);
+        our_little_machine->stack_pointer++;
+        our_little_machine->memory[our_little_machine->stack_pointer] = res;
+    }
 }
 
 void lmsm_i_out(lmsm *our_little_machine) {
-    // TODO, append the current accumulator to the output_buffer in the LMSM
+    char str[10];
+    snprintf(str, sizeof(str), "%d ", our_little_machine -> accumulator);
+    strcat(our_little_machine -> output_buffer, str);
 }
 
 void lmsm_i_inp(lmsm *our_little_machine) {
     // TODO read a value from the command line and store it as an int in the accumulator
+    // i think this works???
+    int input;
+    scanf("%d", &input);
+    our_little_machine -> accumulator = input;
 }
 
 void lmsm_i_load(lmsm *our_little_machine, int location) {
+    our_little_machine -> accumulator = our_little_machine -> memory[location];
 }
 
 void lmsm_i_add(lmsm *our_little_machine, int location) {
+    our_little_machine -> accumulator += our_little_machine -> memory[location];
 }
 
 void lmsm_i_sub(lmsm *our_little_machine, int location) {
+    our_little_machine -> accumulator -= our_little_machine -> memory[location];
 }
 
 void lmsm_i_load_immediate(lmsm *our_little_machine, int value) {
+    our_little_machine -> accumulator = value;
 }
 
 void lmsm_i_store(lmsm *our_little_machine, int location) {
+    our_little_machine -> memory [location] = our_little_machine -> accumulator;
 }
 
 void lmsm_i_halt(lmsm *our_little_machine) {
+    our_little_machine -> status = STATUS_HALTED;
 }
 
 void lmsm_i_branch_unconditional(lmsm *our_little_machine, int location) {
+    our_little_machine -> program_counter = location;
 }
 
 void lmsm_i_branch_if_zero(lmsm *our_little_machine, int location) {
+    if(our_little_machine -> accumulator == 0) {
+        our_little_machine -> program_counter = location;
+    }
 }
-
 void lmsm_i_branch_if_positive(lmsm *our_little_machine, int location) {
+    if(our_little_machine -> accumulator >= 0) {
+        our_little_machine -> program_counter = location;
+    }
 }
 
 void lmsm_step(lmsm *our_little_machine) {
@@ -115,14 +256,54 @@ void lmsm_step(lmsm *our_little_machine) {
 //======================================================
 
 void lmsm_exec_instruction(lmsm *our_little_machine, int instruction) {
-
-    // TODO - dispatch the rest of the instruction set and implement
-    //        the instructions above
-
     if (instruction == 0) {
         lmsm_i_halt(our_little_machine);
-    } else if (100 <= instruction && instruction <= 199) {
-        lmsm_i_add(our_little_machine, instruction - 100);
+    } else if (100 <= instruction && instruction <= 199) { // just checking what the actual input code is 
+        lmsm_i_add(our_little_machine, instruction - 100); // need to check for ALL fucking instructions
+    } else if (200 <= instruction && instruction <= 299) {
+        lmsm_i_sub(our_little_machine, instruction - 200);
+    } else if (300 <= instruction && instruction <= 399) {
+        lmsm_i_store(our_little_machine, instruction - 300);
+    } else if (400 <= instruction && instruction <= 499) {
+        lmsm_i_load_immediate(our_little_machine, instruction - 400);
+    } else if (500 <= instruction && instruction <= 599) {
+        lmsm_i_load(our_little_machine, instruction - 500);
+    } else if (600 <= instruction && instruction <= 699) {
+        lmsm_i_branch_unconditional(our_little_machine, instruction - 600);
+    } else if (700 <= instruction && instruction <= 799) {
+        lmsm_i_branch_if_zero(our_little_machine, instruction - 700);
+    } else if (800 <= instruction && instruction <= 899) {
+        lmsm_i_branch_if_positive(our_little_machine, instruction - 800);
+    } else if (instruction == 901) {
+        lmsm_i_inp(our_little_machine);
+    } else if (instruction == 902) {
+        lmsm_i_out(our_little_machine);
+    } else if (instruction == 910) {
+        lmsm_i_jal(our_little_machine);
+    } else if (instruction == 911) {
+        lmsm_i_ret(our_little_machine);
+    } else if (instruction == 920) {
+        lmsm_i_push(our_little_machine);
+    } else if (instruction == 921) {
+        lmsm_i_pop(our_little_machine);
+    } else if (instruction == 922) {
+        lmsm_i_dup(our_little_machine);
+    } else if (instruction == 923) {
+        lmsm_i_drop(our_little_machine);
+    } else if (instruction == 924) {
+        lmsm_i_swap(our_little_machine);
+    } else if (instruction == 930) {
+        lmsm_i_sadd(our_little_machine);
+    } else if (instruction == 931) {
+        lmsm_i_ssub(our_little_machine);
+    } else if (instruction == 932) {
+        lmsm_i_smul(our_little_machine);
+    } else if (instruction == 933) {
+        lmsm_i_sdiv(our_little_machine);
+    } else if (instruction == 934) {
+        lmsm_i_smax(our_little_machine);
+    } else if (instruction == 935) {
+        lmsm_i_smin(our_little_machine);
     } else {
         our_little_machine->error_code = ERROR_UNKNOWN_INSTRUCTION;
         our_little_machine->status = STATUS_HALTED;
