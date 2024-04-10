@@ -34,9 +34,13 @@ int lmsm_has_two_values_on_stack(lmsm *our_little_machine) {
 void lmsm_i_jal(lmsm *our_little_machine) {
     // TODO: get this to work
     //our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
-    our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
     our_little_machine -> return_address_pointer ++;
-    our_little_machine -> memory [our_little_machine -> return_address_pointer] = our_little_machine -> program_counter;
+    our_little_machine -> memory[our_little_machine -> return_address_pointer] = our_little_machine -> program_counter;
+    //our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
+    //our_little_machine -> return_address_pointer ++;
+    our_little_machine -> program_counter = our_little_machine -> memory[our_little_machine -> stack_pointer];
+    our_little_machine -> stack_pointer ++ ;
+    //our_little_machine -> memory [our_little_machine -> return_address_pointer] = our_little_machine -> program_counter;
     //our_little_machine -> program_counter = our_little_machine -> memory [our_little_machine -> stack_pointer];
 }
 
