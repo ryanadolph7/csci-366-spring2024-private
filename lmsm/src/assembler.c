@@ -52,6 +52,7 @@ asm_instruction * asm_make_instruction(char* type, char *label, char *label_refe
         new_instruction->offset = 0;
     }
     // TODO: set the number of slots for the instruction into the slots field
+    // need to look at instruction, use IF to check for number of slots
     return new_instruction;
 }
 
@@ -128,6 +129,38 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
     asm_instruction * last_instruction = NULL;
     asm_instruction * current_instruction = NULL;
 
+    char *current = strtok(src, " \n");
+    // [LABEL] <INST> [LABEL_REF | VALUE}
+    // FOO INP
+    // INP
+    // ADD FOO
+    // BAR ADD FOO
+    // BAR ADD
+
+    while(current != NULL) {
+        char *type = NULL;
+        char *label = NULL;
+        char *label_ref = NULL;
+        int value = 0;
+
+        if(asm_is_instruction(current)) { // if the first input is an instruction, set label to current
+            label = current;
+            current = strtok(NULL, " \n");
+        } // need to do NULL checks after this if statement for other checks on strtok()
+
+        // use asm_instruction_requires_arg() to check if its direct indexing instruction
+        // use asm_is_num() to check for a value in parsing
+
+        //asm_instruction *inst = asm_make_instruction(type, label, label_ref, value, last_instruction);
+
+        // TODO: assign current instruction to last instruction (sets up LL of inst)
+
+        // TODO: check if asm_compilation_result *root is null, if YES, assign current instruction to it
+        //                                                      else, just keep looping
+        current = strtok(NULL, " \n");
+    }
+
+
     //TODO - generate a linked list of instructions and store the first into
     //       the result->root
     //
@@ -153,10 +186,17 @@ void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruct
     // you will need to look it up with `asm_find_label` and, if the label does not exist,
     // report the error as ASM_ERROR_BAD_LABEL
 
-
     int value_for_instruction = instruction->value;
+
+    if (instruction->label_reference) { // need to turn the label into the offset / call asm_find_label
+        value_for_instruction = asm_find_label(result->root, instruction->label_reference);
+    }
+
+    // some instructions have multiple offsets
     if (strcmp("ADD", instruction->instruction) == 0) {
         result->code[instruction->offset] = 100 + value_for_instruction;
+    } else if (strcmp("SUB", instruction->instruction) == 0) {
+        result->code[instruction->offset] = 200 + value_for_instruction;
     } else {
         result->code[instruction->offset] = 0;
     }
