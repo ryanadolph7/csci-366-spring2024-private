@@ -17,12 +17,15 @@ extern char *ASM_ERROR_OUT_OF_RANGE;
 //  Represents an asm_instruction for the LMSM architecture
 //===================================================================
 typedef struct asm_instruction {
-    char* instruction;         // the type of the asm_instruction
-    char* label;               // the label of the asm_instruction if any (opcode)
-    char* label_reference;     // the label this asm_instruction refers to, if any (operand / will need to parse)
-    int value;                 // the value of the asm_instruction, if any (operand / will need to parse / seperate from label_ref)
-    int slots;                // the offset of the asm_instruction, if any (instructions / psuedoinstructions)
-    int offset;                // the offset of the asm_instruction, if any (where instruction is placed in mem)
+    char* instruction;         // the type of the asm_instruction - ie. INP
+    char* label;               // the label of the asm_instruction if any (opcode) - ie. FOO inp
+    char* label_reference;     // the label this asm_instruction refers to, if any (operand / will need to parse) - ie. add ONE
+    int value;                 // the value of the asm_instruction, if any (operand / will need to parse / seperate from label_ref) - ie. add 5
+                                // check if char or int for label_ref / value - if char ->label_ref = ..., if int -> label_ref = ...
+    int slots;                // the number of slots an instruction takes up in mem, if any (instructions / psuedoinstructions) - ie.
+                                // prolly check if its a psuedo, if spushi then ->slot = 2, if call ->slot = 3
+    int offset;                // the offset of the asm_instruction, if any (where instruction is placed in mem) - ie. 1 - INP, 2 - ADD, 3 - DAT
+                                // some instructions can be placed one after the other so in slot 1, 2, 3 ...
     struct asm_instruction * next; // the next asm_instruction (pointer to next instruction / LL)
 } asm_instruction;
 

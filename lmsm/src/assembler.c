@@ -12,6 +12,7 @@ char *ASM_ERROR_ARG_REQUIRED = "Argument Required";
 char *ASM_ERROR_BAD_LABEL = "Bad Label";
 char *ASM_ERROR_OUT_OF_RANGE = "Number is out of range";
 
+
 //=========================================================
 //  All the instructions available on the LMSM architecture
 //=========================================================
@@ -51,8 +52,14 @@ asm_instruction * asm_make_instruction(char* type, char *label, char *label_refe
     } else {
         new_instruction->offset = 0;
     }
-    // TODO: set the number of slots for the instruction into the slots field
-    // need to look at instruction, use IF to check for number of slots
+    // TO DO: set the number of slots for the instruction into the slots field
+    if (strcmp(new_instruction->instruction, "SPUSHI") == 0) {
+        new_instruction->slots = 2;
+    } else if (strcmp(new_instruction->instruction, "CALL") == 0) {
+        new_instruction->slots = 3;
+    } else {
+        new_instruction->slots = 1;
+    }
     return new_instruction;
 }
 
@@ -113,6 +120,13 @@ int asm_is_num(char * token){
 
 int asm_find_label(asm_instruction *root, char *label) {
     // TODO - scan the linked list for the given label, return -1 if not found
+    struct asm_instruction *head = root;
+    while(head != NULL) {
+        if(strcmp(head->label, label) == 0) {
+            return 0;
+        }
+        head = head->next;
+    }
     return -1;
 }
 
