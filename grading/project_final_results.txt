@@ -69,7 +69,7 @@ Expected equality of these values:
   result->error
     Which is: NULL
   ASM_ERROR_UNKNOWN_INSTRUCTION
-    Which is: 0xaaaad73b0700
+    Which is: 0xaaaacbce0700
 [  FAILED  ] parsing_tests.unknown_instruction_is_handled (0 ms)
 [ RUN      ] parsing_tests.no_argument_for_instruction_causes_error
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/assembler.cpp:127: Failure
@@ -77,7 +77,7 @@ Expected equality of these values:
   result->error
     Which is: NULL
   ASM_ERROR_ARG_REQUIRED
-    Which is: 0xaaaad73b0720
+    Which is: 0xaaaacbce0720
 [  FAILED  ] parsing_tests.no_argument_for_instruction_causes_error (0 ms)
 [ RUN      ] parsing_tests.numbers_out_of_machine_range_cause_error
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/assembler.cpp:134: Failure
@@ -85,7 +85,7 @@ Expected equality of these values:
   result->error
     Which is: NULL
   ASM_ERROR_OUT_OF_RANGE
-    Which is: 0xaaaad73b0748
+    Which is: 0xaaaacbce0748
 [  FAILED  ] parsing_tests.numbers_out_of_machine_range_cause_error (0 ms)
 [ RUN      ] parsing_tests.negative_numbers_out_of_machine_range_are_capped_properly
 /home/parallels/autograder/csci-366-spring2024/grading/scripts/repos/ryan_adolph/lmsm/test/assembler.cpp:141: Failure
@@ -93,7 +93,7 @@ Expected equality of these values:
   result->error
     Which is: NULL
   ASM_ERROR_OUT_OF_RANGE
-    Which is: 0xaaaad73b0748
+    Which is: 0xaaaacbce0748
 [  FAILED  ] parsing_tests.negative_numbers_out_of_machine_range_are_capped_properly (0 ms)
 [----------] 10 tests from parsing_tests (0 ms total)
 
