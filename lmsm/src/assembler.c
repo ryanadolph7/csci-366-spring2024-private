@@ -50,7 +50,7 @@ asm_instruction * asm_make_instruction(char* type, char *label, char *label_refe
         predecessor->next = new_instruction;
         new_instruction->offset = predecessor->offset + predecessor->slots;
     } else {
-        new_instruction->offset = 0;
+        new_instruction->offset = 1;
     }
 
     if (strcmp(new_instruction->instruction, "SPUSHI") == 0) {
@@ -122,7 +122,7 @@ int asm_find_label(asm_instruction *root, char *label) {
     // TO DO - scan the linked list for the given label, return -1 if not found
     struct asm_instruction *head = root;
     while(head != NULL) {
-        if(strcmp(head->label, label) == 0) {
+        if(head->label == label) {
             return 0;
         }
         head = head->next;
