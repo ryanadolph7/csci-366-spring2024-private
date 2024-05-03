@@ -50,7 +50,7 @@ asm_instruction * asm_make_instruction(char* type, char *label, char *label_refe
         predecessor->next = new_instruction;
         new_instruction->offset = predecessor->offset + predecessor->slots;
     } else {
-        new_instruction->offset = 1;
+        new_instruction->offset = 0;
     }
 
     if (strcmp(new_instruction->instruction, "SPUSHI") == 0) {
@@ -183,15 +183,34 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
             current = strtok(NULL, " \n");
         } // need to do NULL checks after this if statement for other checks on strtok()
         type = current;
+        if(!asm_is_instruction(type)) {
+            result->error = ASM_ERROR_UNKNOWN_INSTRUCTION;
+        }
         if(asm_instruction_requires_arg(current) == 1) {
             current = strtok(NULL, " \n");
-            if(asm_is_num(current)) {
+            if (current == NULL) {
+                result->error = ASM_ERROR_ARG_REQUIRED;
+            } else if (asm_is_num(current)) {
                 val_char = current;
                 value = atoi(current);
+                if(value > 999 || value < -999) {
+                    result->error = ASM_ERROR_OUT_OF_RANGE;
+                }
+                if(value > 999) {
+                    value = 999;
+                } else if (value < -999) {
+                    value = -999;
+                }
             } else {
-                label_ref = current;
+                if(asm_find_label(result->root,current) != 0) {
+                    result->error = ASM_ERROR_BAD_LABEL;
+               } else {
+                    label_ref = current;
+                }
             }
         }
+
+
         asm_instruction *instruction = asm_make_instruction(type, label, label_ref, value, last_instruction);
         insert(result, instruction);
         current = strtok(NULL, " \n");

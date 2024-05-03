@@ -505,7 +505,7 @@ TEST(code_generation, labels_resolve_at_code_generation_time) {
     asm_gen_code_for_instruction(result, instruction1);
     asm_gen_code_for_instruction(result, instruction2);
 
-    ASSERT_EQ(result->code[0], 501); // LDA should load data at address 01 (The DAT w/ the lable "FOO")
+    ASSERT_EQ(result->code[0], 501); // LDA should load data at address 01 (The DAT w/ the label "FOO")
     ASSERT_EQ(result->code[1], 001); // DAT
 
     asm_delete_compilation_result(result);
