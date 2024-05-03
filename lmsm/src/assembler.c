@@ -154,6 +154,8 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
 
     // copy over so strtok can mutate
     char * src = calloc(strlen(original_src) + 1, sizeof(char));
+    //char[]  src_cpy = calloc(strlen(original_src) + 1, sizeof(char));
+    //strcat(src_cpy, original_src);
     strcat(src, original_src);
     asm_instruction * last_instruction = NULL;
     // think i need to update this to result
@@ -168,59 +170,36 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
     // BAR ADD FOO
     // BAR ADD
 
-    int i = 0;
 
     while(current != NULL) {
         char *type = NULL;
         char *label = NULL;
         char *label_ref = NULL;
         int value = 0;
-
+        char *val_char = NULL;
+        char *sub = calloc(strlen(original_src) + 1, sizeof(char));
         if(!asm_is_instruction(current)) { // if the first input isnt an instruction, set label to current
             label = current;
             current = strtok(NULL, " \n");
-            i++;
         } // need to do NULL checks after this if statement for other checks on strtok()
         type = current;
-        i++;
-
         if(asm_instruction_requires_arg(current) == 1) {
             current = strtok(NULL, " \n");
             if(asm_is_num(current)) {
+                val_char = current;
                 value = atoi(current);
             } else {
                 label_ref = current;
             }
-            i++;
         }
-
-        i++;
-        // use asm_instruction_requires_arg() to check if its direct indexing instruction
-        // use asm_is_num() to check for a value in parsing
-        // TODO: assign current instruction to last instruction (sets up LL of inst)
-        // TODO: check if asm_compilation_result *root is null, if YES, assign current instruction to it
-        //                                                      else, just keep looping
         asm_instruction *instruction = asm_make_instruction(type, label, label_ref, value, last_instruction);
         insert(result, instruction);
-        //if(result->root == NULL) {
-        //    last_instruction = instruction;
-        //    result->root = instruction;
-        //    result->root->next = NULL;
-        //} else {
-        //    while(result->root->next != NULL) {
-        //        result->root = result->root->next;
-        //    }
-        //    last_instruction = result->root;
-        //    result->root = result->root->next;
-        //    result->root = instruction;
-        //    result->root->next->next = NULL;
-        //}
         current = strtok(NULL, " \n");
-        if (current == NULL) {
-            break;
-        } else {
-            asm_parse_src(result, original_src);
+        while(current != NULL) {
+            strcat(sub, current);
+            current = strtok(NULL," \n");
         }
+        asm_parse_src(result, sub);
     }
 
     //TODO - generate a linked list of instructions and store the first into
@@ -240,7 +219,6 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
 //======================================================
 
 void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruction *instruction) {
-    //TODO - generate the machine code for the given instruction
 
     // note that some instructions will take up multiple slots
     // note that if the instruction has a label reference rather than a raw number reference
