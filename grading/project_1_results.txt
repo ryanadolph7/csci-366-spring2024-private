@@ -8,9 +8,13 @@ Scanning dependencies of target lmsm
 [ 41%] Built target lmsm
 [ 48%] Built target gtest
 [ 55%] Built target gtest_main
-[ 58%] Linking CXX executable lmsm_assembler_tests
+Scanning dependencies of target lmsm_assembler_tests
+[ 58%] Building CXX object test/CMakeFiles/lmsm_assembler_tests.dir/assembler.cpp.o
+[ 62%] Linking CXX executable lmsm_assembler_tests
 [ 65%] Built target lmsm_assembler_tests
-[ 68%] Linking CXX executable lmsm_tests
+Scanning dependencies of target lmsm_tests
+[ 68%] Building CXX object test/CMakeFiles/lmsm_tests.dir/assembler.cpp.o
+[ 72%] Linking CXX executable lmsm_tests
 [ 79%] Built target lmsm_tests
 [ 82%] Linking CXX executable lmsm_emulator_tests
 [ 86%] Built target lmsm_emulator_tests
